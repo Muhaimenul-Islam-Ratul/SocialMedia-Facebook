@@ -1,0 +1,5 @@
+{
+  "name": "SocialFeed",
+  "description": "A secure social media feed with authentication, post creation, likes, and comments.",
+  "requestFramePermissions": []
+}
