@@ -166,7 +166,7 @@ export default function RegisterPage() {
                       value={formData.firstName}
                       onChange={handleChange}
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
-                      placeholder="John"
+                      placeholder="Muhaimenul"
                     />
                   </div>
 
@@ -182,7 +182,7 @@ export default function RegisterPage() {
                       value={formData.lastName}
                       onChange={handleChange}
                       className="w-full rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3.5 text-slate-900 outline-none transition placeholder:text-slate-400 focus:border-sky-400 focus:bg-white focus:ring-4 focus:ring-sky-100"
-                      placeholder="Doe"
+                      placeholder="Islam"
                     />
                   </div>
                 </div>

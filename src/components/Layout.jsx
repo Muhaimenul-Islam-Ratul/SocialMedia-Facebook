@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
   Bell,
   ChevronDown,
@@ -16,6 +16,7 @@ import {
   X,
 } from 'lucide-react';
 import { useAuth } from '../App';
+import { explorePages } from '../data/explorePages';
 
 import logo from '../../Selection Task for Full Stack Engineer at Appifylab/assets/images/logo.svg';
 import avatarImg from '../../Selection Task for Full Stack Engineer at Appifylab/assets/images/Avatar.png';
@@ -23,17 +24,6 @@ import people1 from '../../Selection Task for Full Stack Engineer at Appifylab/a
 import people2 from '../../Selection Task for Full Stack Engineer at Appifylab/assets/images/people2.png';
 import people3 from '../../Selection Task for Full Stack Engineer at Appifylab/assets/images/people3.png';
 import eventImg from '../../Selection Task for Full Stack Engineer at Appifylab/assets/images/feed_event1.png';
-
-const exploreItems = [
-  'Learning',
-  'Insights',
-  'Find friends',
-  'Bookmarks',
-  'Group',
-  'Gaming',
-  'Settings',
-  'Save post',
-];
 
 const suggestedPeople = [
   { name: 'Steve Jobs', role: 'CEO of Apple', image: people1 },
@@ -77,6 +67,7 @@ function ProfileAvatar({ profile, className = 'h-10 w-10' }) {
 
 export default function Layout({ children }) {
   const { profile, logout } = useAuth();
+  const location = useLocation();
   const [darkMode, setDarkMode] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileMenu, setShowProfileMenu] = useState(false);
@@ -107,6 +98,18 @@ export default function Layout({ children }) {
     ? 'border-slate-800 bg-slate-900 text-slate-100 placeholder:text-slate-500'
     : 'border-slate-200 bg-slate-50 text-slate-900 placeholder:text-slate-400';
 
+  const isHomePage = location.pathname === '/';
+  const navButtonClass = (active) =>
+    `flex h-12 w-12 items-center justify-center rounded-2xl transition ${
+      active
+        ? darkMode
+          ? 'bg-sky-500/15 text-sky-300'
+          : 'bg-sky-50 text-sky-600'
+        : darkMode
+          ? 'text-slate-300 hover:bg-slate-800'
+          : 'text-slate-600 hover:bg-slate-100'
+    }`;
+
   return (
     <div className={`min-h-screen transition-colors ${shellClass}`}>
       <div className={darkMode ? 'bg-[radial-gradient(circle_at_top,_rgba(59,130,246,0.14),_transparent_30%),linear-gradient(180deg,_#020617_0%,_#0f172a_100%)]' : 'bg-[radial-gradient(circle_at_top,_rgba(56,189,248,0.12),_transparent_28%),linear-gradient(180deg,_#f8fbff_0%,_#eef4ff_100%)]'}>
@@ -128,12 +131,12 @@ export default function Layout({ children }) {
             </div>
 
             <div className="ml-auto hidden items-center gap-2 md:flex">
-              <Link to="/" className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${darkMode ? 'bg-sky-500/15 text-sky-300' : 'bg-sky-50 text-sky-600'}`}>
+              <Link to="/" className={navButtonClass(isHomePage)}>
                 <Home size={20} />
               </Link>
-              <button className={`flex h-12 w-12 items-center justify-center rounded-2xl transition ${darkMode ? 'text-slate-300 hover:bg-slate-800' : 'text-slate-600 hover:bg-slate-100'}`}>
+              <Link to="/find-friends" className={navButtonClass(location.pathname === '/find-friends')}>
                 <Users size={20} />
-              </button>
+              </Link>
 
               <div className="relative">
                 <button
@@ -218,10 +221,10 @@ export default function Layout({ children }) {
                       </div>
                     </div>
                     <div className="space-y-2">
-                      <button className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left ${darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}>
+                      <NavLink to="/settings" className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left ${darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}>
                         <span className="flex items-center gap-3"><Settings size={18} /> Settings</span>
                         <ChevronDown size={16} className="-rotate-90" />
-                      </button>
+                      </NavLink>
                       <button className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left ${darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}>
                         <span className="flex items-center gap-3"><UserRound size={18} /> Help & Support</span>
                         <ChevronDown size={16} className="-rotate-90" />
@@ -266,9 +269,10 @@ export default function Layout({ children }) {
               </div>
               <div className="space-y-2">
                 <Link to="/" className="flex items-center gap-3 rounded-2xl px-4 py-3"><Home size={18} /> Home</Link>
-                <button className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left"><Users size={18} /> Friend Requests</button>
+                <Link to="/find-friends" className="flex items-center gap-3 rounded-2xl px-4 py-3"><Users size={18} /> Find Friends</Link>
                 <button className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left"><Bell size={18} /> Notifications</button>
                 <button className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left"><MessageCircle size={18} /> Messages</button>
+                <Link to="/settings" className="flex items-center gap-3 rounded-2xl px-4 py-3"><Settings size={18} /> Settings</Link>
                 <button type="button" onClick={handleLogout} className="flex w-full items-center gap-3 rounded-2xl px-4 py-3 text-left"><LogOut size={18} /> Log Out</button>
               </div>
             </div>
@@ -282,19 +286,31 @@ export default function Layout({ children }) {
                 <section className={`rounded-[28px] p-6 ${cardClass}`}>
                   <h3 className="mb-5 text-lg font-semibold">Explore</h3>
                   <div className="space-y-2">
-                    {exploreItems.map((item, index) => (
-                      <button
-                        key={item}
-                        className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${darkMode ? 'hover:bg-slate-800' : 'hover:bg-slate-50'}`}
+                    {explorePages.map((item) => {
+                      const active = location.pathname === item.path;
+
+                      return (
+                      <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={`flex w-full items-center justify-between rounded-2xl px-4 py-3 text-left transition ${
+                          active
+                            ? darkMode
+                              ? 'bg-slate-800 text-white'
+                              : 'bg-sky-50 text-sky-700'
+                            : darkMode
+                              ? 'hover:bg-slate-800'
+                              : 'hover:bg-slate-50'
+                        }`}
                       >
-                        <span>{item}</span>
-                        {(index === 0 || index === 5) && (
+                        <span>{item.label}</span>
+                        {item.badge && (
                           <span className="rounded-full bg-sky-100 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-sky-700">
-                            New
+                            {item.badge}
                           </span>
                         )}
-                      </button>
-                    ))}
+                      </NavLink>
+                    )})}
                   </div>
                 </section>
 
@@ -420,9 +436,9 @@ export default function Layout({ children }) {
             <Link to="/" className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
               <Home size={20} />
             </Link>
-            <button className={`relative flex h-12 w-12 items-center justify-center rounded-2xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+            <Link to="/find-friends" className={`relative flex h-12 w-12 items-center justify-center rounded-2xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
               <Users size={20} />
-            </button>
+            </Link>
             <button className={`relative flex h-12 w-12 items-center justify-center rounded-2xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
               <Bell size={20} />
               <span className="absolute right-2 top-2 h-5 min-w-5 rounded-full bg-sky-500 px-1 text-[10px] font-semibold leading-5 text-white">6</span>
@@ -431,13 +447,9 @@ export default function Layout({ children }) {
               <MessageCircle size={20} />
               <span className="absolute right-2 top-2 h-5 min-w-5 rounded-full bg-sky-500 px-1 text-[10px] font-semibold leading-5 text-white">2</span>
             </button>
-            <button
-              type="button"
-              onClick={() => setMobileMenuOpen((current) => !current)}
-              className={`flex h-12 w-12 items-center justify-center rounded-2xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}
-            >
-              <Menu size={20} />
-            </button>
+            <Link to="/settings" className={`flex h-12 w-12 items-center justify-center rounded-2xl ${darkMode ? 'text-slate-300' : 'text-slate-600'}`}>
+              <Settings size={20} />
+            </Link>
           </div>
         </div>
       </div>

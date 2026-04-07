@@ -92,7 +92,7 @@ export default function Register() {
                     name="firstName"
                     required
                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
-                    placeholder="John"
+                    placeholder="Muhaimenul"
                     value={formData.firstName}
                     onChange={handleChange}
                   />
@@ -107,7 +107,7 @@ export default function Register() {
                     name="lastName"
                     required
                     className="w-full bg-gray-50 border border-gray-100 rounded-2xl py-4 pl-12 pr-4 text-gray-900 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 transition-all font-medium"
-                    placeholder="Doe"
+                    placeholder="Islam"
                     value={formData.lastName}
                     onChange={handleChange}
                   />

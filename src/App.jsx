@@ -1,9 +1,11 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { BrowserRouter as Router, Navigate, Route, Routes } from 'react-router-dom';
 import Layout from './components/Layout';
+import ExploreSectionPage from './pages/ExploreSectionPage';
 import FeedPage from './pages/FeedMongoPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
+import { explorePages } from './data/explorePages';
 import { apiFetch, clearAccessToken, getAccessToken, setAccessToken } from './lib/api';
 import { closeSocket } from './lib/socket';
 
@@ -149,6 +151,19 @@ export default function App() {
               </ProtectedRoute>
             }
           />
+          {explorePages.map((page) => (
+            <Route
+              key={page.path}
+              path={page.path}
+              element={
+                <ProtectedRoute>
+                  <Layout>
+                    <ExploreSectionPage />
+                  </Layout>
+                </ProtectedRoute>
+              }
+            />
+          ))}
           <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
