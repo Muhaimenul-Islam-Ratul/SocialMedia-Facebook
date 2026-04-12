@@ -1,0 +1,14 @@
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
+.vercel
+.railway
+.git
+.gitignore
+README.md
+vite-dev.err.log
+api-dev.err.log
+api-dev.log
+vite-dev.log
+dist

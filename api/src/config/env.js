@@ -2,7 +2,7 @@ const required = (value, fallback = '') => value || fallback;
 
 export const env = {
   nodeEnv: process.env.NODE_ENV || 'development',
-  port: Number(process.env.API_PORT || 4000),
+  port: Number(process.env.API_PORT || process.env.PORT || 4000),
   mongoUri: required(process.env.MONGODB_URI, 'mongodb://127.0.0.1:27017/socialfeed'),
   jwtAccessSecret: required(process.env.JWT_ACCESS_SECRET, 'dev-access-secret'),
   jwtRefreshSecret: required(process.env.JWT_REFRESH_SECRET, 'dev-refresh-secret'),
