@@ -3,21 +3,21 @@ import { asyncHandler } from '../lib/async-handler.js';
 import { serializeUser } from '../serializers/auth.js';
 import { loginUser, refreshUserSession, registerUser, revokeRefreshToken } from '../services/auth-service.js';
 
+const cookieOptions = {
+  httpOnly: true,
+  sameSite: env.nodeEnv === 'production' ? 'none' : 'lax',
+  secure: env.nodeEnv === 'production' ? true : env.cookieSecure,
+};
+
 function setRefreshCookie(res, refreshToken) {
   res.cookie('refreshToken', refreshToken, {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: env.cookieSecure,
+    ...cookieOptions,
     maxAge: env.refreshTokenTtlDays * 24 * 60 * 60 * 1000,
   });
 }
 
 function clearRefreshCookie(res) {
-  res.clearCookie('refreshToken', {
-    httpOnly: true,
-    sameSite: 'lax',
-    secure: env.cookieSecure,
-  });
+  res.clearCookie('refreshToken', cookieOptions);
 }
 
 export const register = asyncHandler(async (req, res) => {
