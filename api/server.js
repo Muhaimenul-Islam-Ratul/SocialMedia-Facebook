@@ -14,12 +14,23 @@ const app = express();
 const httpServer = createServer(app);
 
 const corsOptions = {
-  origin: env.clientOrigin,
+  origin(origin, callback) {
+    // Allow same-origin/server-to-server requests and configured frontend origins.
+    if (!origin || env.clientOrigins.includes(origin)) {
+      callback(null, true);
+      return;
+    }
+
+    callback(new Error(`Origin ${origin} is not allowed by CORS`));
+  },
   credentials: true,
 };
 
 const io = new Server(httpServer, {
-  cors: corsOptions,
+  cors: {
+    origin: env.clientOrigins,
+    credentials: true,
+  },
 });
 
 setSocketServer(io);

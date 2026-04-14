@@ -1,4 +1,5 @@
-const API_BASE = import.meta.env.VITE_API_BASE || '/api';
+const PROD_API_BASE = 'https://socialfeed-backend-service-production.up.railway.app/api';
+const API_BASE = import.meta.env.VITE_API_BASE || (import.meta.env.PROD ? PROD_API_BASE : '/api');
 const ACCESS_TOKEN_KEY = 'socialfeed.accessToken';
 
 let accessToken = localStorage.getItem(ACCESS_TOKEN_KEY);
